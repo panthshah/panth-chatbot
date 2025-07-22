@@ -1,0 +1,130 @@
+<!-- Framer Embed Code for Panth's Chatbot -->
+<script>
+  // Create and inject the chatbot
+  (function() {
+    // Only run once
+    if (document.getElementById('panth-chatbot-injected')) return;
+    
+    // Create script tag to load the chatbot
+    const script = document.createElement('script');
+    script.id = 'panth-chatbot-injected';
+    script.innerHTML = `
+      // Chatbot injection code
+      const chatbotHTML = \`
+        <div id="panth-chatbot-container">
+          <!-- Floating Chat Button -->
+          <button id="chat-button" style="
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.3);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          ">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+          </button>
+          
+          <!-- Chat Iframe (initially hidden) -->
+          <iframe 
+            id="chat-iframe" 
+            src="YOUR_DEPLOYED_URL_HERE"
+            style="
+              position: fixed;
+              top: 0;
+              right: -100%;
+              width: 400px;
+              height: 100vh;
+              border: none;
+              z-index: 1001;
+              transition: right 0.3s ease;
+              box-shadow: -8px 0 32px rgba(0,0,0,0.15);
+            "
+          ></iframe>
+          
+          <!-- Backdrop -->
+          <div id="chat-backdrop" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+          "></div>
+        </div>
+      \`;
+      
+      // Inject chatbot HTML
+      document.body.insertAdjacentHTML('beforeend', chatbotHTML);
+      
+      // Add functionality
+      const chatButton = document.getElementById('chat-button');
+      const chatIframe = document.getElementById('chat-iframe');
+      const chatBackdrop = document.getElementById('chat-backdrop');
+      
+      let isOpen = false;
+      
+      function openChat() {
+        isOpen = true;
+        chatIframe.style.right = '0';
+        chatBackdrop.style.opacity = '1';
+        chatBackdrop.style.visibility = 'visible';
+        chatButton.style.transform = 'scale(0)';
+      }
+      
+      function closeChat() {
+        isOpen = false;
+        chatIframe.style.right = '-100%';
+        chatBackdrop.style.opacity = '0';
+        chatBackdrop.style.visibility = 'hidden';
+        chatButton.style.transform = 'scale(1)';
+      }
+      
+      // Event listeners
+      chatButton.addEventListener('click', openChat);
+      chatBackdrop.addEventListener('click', closeChat);
+      
+      // Button hover effect
+      chatButton.addEventListener('mouseenter', () => {
+        if (!isOpen) chatButton.style.transform = 'scale(1.1)';
+      });
+      
+      chatButton.addEventListener('mouseleave', () => {
+        if (!isOpen) chatButton.style.transform = 'scale(1)';
+      });
+      
+      // Listen for close message from iframe
+      window.addEventListener('message', (event) => {
+        if (event.data === 'close-chat') {
+          closeChat();
+        }
+      });
+    `;
+    
+    document.head.appendChild(script);
+  })();
+</script>
+
+<!-- 
+INSTRUCTIONS FOR FRAMER:
+1. Deploy your chatbot to get a URL
+2. Replace "YOUR_DEPLOYED_URL_HERE" with your actual chatbot URL
+3. In Framer: Add an Embed component
+4. Paste this entire code
+5. Publish your Framer site!
+--> 
