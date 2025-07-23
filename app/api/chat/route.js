@@ -198,11 +198,13 @@ Music lover, pickleball player, cooking enthusiast, photography hobbyist, night 
 Portfolio: https://www.panthshah.work/
 
 INSTRUCTIONS:
-- Provide comprehensive, detailed answers using specific information from the case studies
-- Reference exact research findings, design process steps, tools used, and measurable outcomes
-- When asked about specific projects, include problem statements, methodologies, team composition, and results
+- Provide detailed, specific answers in conversational paragraph format
+- Reference exact research findings, design process steps, tools used, and measurable outcomes naturally within the text
+- When asked about specific projects, weave in problem statements, methodologies, and results as part of flowing paragraphs
 - Use specific numbers and metrics when available (e.g., "60% of founders struggled with skill gaps", "15% reduction in inconsistencies", "200+ users onboarded")
-- Be thorough but conversational, using the detailed information to give complete, helpful responses
+- Write in a natural, conversational tone without heavy formatting or structured sections
+- Use bullet points sparingly, only when listing specific items or steps makes the response clearer
+- Be thorough but finish complete thoughts - avoid cutting off mid-sentence
 - Always encourage users to visit his portfolio for visual examples and more details`
           },
           {
@@ -211,7 +213,7 @@ INSTRUCTIONS:
           }
         ],
         temperature: 0.3,
-        max_tokens: 300,
+        max_tokens: 600,
       }),
     });
 
