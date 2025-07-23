@@ -1,9 +1,14 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface ChatMessage {
   user: string;
   bot: string;
+}
+
+interface Position {
+  x: number;
+  y: number;
 }
 
 export default function FloatingChat() {
@@ -11,6 +16,11 @@ export default function FloatingChat() {
   const [history, setHistory] = useState<ChatMessage[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [position, setPosition] = useState<Position>({ x: 20, y: 20 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState<Position>({ x: 0, y: 0 });
+  
+  const chatButtonRef = useRef<HTMLDivElement>(null);
 
   async function sendMessage() {
     if (!message.trim()) return;
@@ -40,25 +50,69 @@ export default function FloatingChat() {
     }
   };
 
+  // Drag functionality
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!chatButtonRef.current) return;
+    
+    const rect = chatButtonRef.current.getBoundingClientRect();
+    setDragOffset({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+    setIsDragging(true);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging) return;
+    
+    setPosition({
+      x: e.clientX - dragOffset.x,
+      y: e.clientY - dragOffset.y
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, dragOffset]);
+
   return (
     <>
-      {/* Floating Chat Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 z-50 group"
-        aria-label="Open chat with Panth's AI assistant"
+      {/* Draggable Chat Button */}
+      <div
+        ref={chatButtonRef}
+        style={{
+          position: 'fixed',
+          left: `${position.x}px`,
+          top: `${position.y}px`,
+          zIndex: 1000,
+          cursor: isDragging ? 'grabbing' : 'grab'
+        }}
+        onMouseDown={handleMouseDown}
+        className="select-none"
       >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-        
-        {/* Tooltip */}
-        <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-          Ask me about Panth!
-        </div>
-      </button>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-200 flex items-center space-x-2 border border-gray-600"
+          style={{ cursor: isDragging ? 'grabbing' : 'pointer' }}
+        >
+          <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+          <span className="font-medium">Chat</span>
+        </button>
+      </div>
 
-      {/* Floating Chat Sidebar */}
+      {/* Chat Sidebar */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
           {/* Backdrop */}
@@ -70,17 +124,20 @@ export default function FloatingChat() {
           {/* Chat Panel */}
           <div className="bg-white w-96 h-full shadow-2xl flex flex-col animate-slide-in-right">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 flex justify-between items-center">
-              <div>
-                <h3 className="font-semibold">Panth's AI Assistant</h3>
-                <p className="text-blue-100 text-sm">Ask me anything about Panth!</p>
+            <div className="bg-gradient-to-r from-gray-800 to-gray-700 text-white p-4 flex justify-between items-center">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                <div>
+                  <h3 className="font-semibold">Panth's AI Assistant</h3>
+                  <p className="text-gray-300 text-sm">Ask me anything about Panth!</p>
+                </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="text-white hover:text-gray-200 transition-colors rounded-full p-1 hover:bg-white hover:bg-opacity-20"
+                className="text-white hover:text-gray-300 transition-colors rounded-full p-1 hover:bg-white hover:bg-opacity-20"
                 aria-label="Close chat"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -90,7 +147,7 @@ export default function FloatingChat() {
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
               {history.length === 0 && (
                 <div className="text-center py-8">
-                  <div className="bg-white rounded-lg p-6 shadow-sm">
+                  <div className="bg-white rounded-lg p-6 shadow-sm border">
                     <div className="text-4xl mb-2">👋</div>
                     <h4 className="font-semibold text-gray-800 mb-2">Hi there!</h4>
                     <p className="text-gray-600 text-sm">
@@ -104,7 +161,7 @@ export default function FloatingChat() {
                 <div key={i} className="space-y-3">
                   {/* User Message */}
                   <div className="flex justify-end">
-                    <div className="bg-blue-500 text-white rounded-2xl rounded-br-md px-4 py-2 max-w-xs shadow-sm">
+                    <div className="bg-gray-800 text-white rounded-2xl rounded-br-md px-4 py-2 max-w-xs shadow-sm">
                       {chat.user}
                     </div>
                   </div>
@@ -136,7 +193,7 @@ export default function FloatingChat() {
             <div className="border-t bg-white p-4">
               <div className="flex space-x-2">
                 <input
-                  className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -146,7 +203,7 @@ export default function FloatingChat() {
                 <button 
                   onClick={sendMessage}
                   disabled={isLoading || !message.trim()}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white rounded-full px-4 py-2 transition-colors shadow-sm"
+                  className="bg-gray-800 hover:bg-gray-700 disabled:bg-gray-300 text-white rounded-full px-4 py-2 transition-colors shadow-sm"
                   aria-label="Send message"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
