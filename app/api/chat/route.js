@@ -1,6 +1,20 @@
 // app/api/chat/route.js
 export const runtime = 'edge';
 
+// Add CORS headers for Framer integration
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export async function OPTIONS(req) {
+  return new Response(null, {
+    status: 200,
+    headers: corsHeaders
+  });
+}
+
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -230,7 +244,10 @@ INSTRUCTIONS:
         reply: "Sorry, I'm having trouble connecting to the AI service right now. Please try again later." 
       }), {
         status: 500,
-        headers: { "Content-Type": "application/json" }
+        headers: { 
+          "Content-Type": "application/json",
+          ...corsHeaders
+        }
       });
     }
     
@@ -241,12 +258,18 @@ INSTRUCTIONS:
         reply: "Sorry, I couldn't generate a response. Please try again." 
       }), {
         status: 500,
-        headers: { "Content-Type": "application/json" }
+        headers: { 
+          "Content-Type": "application/json",
+          ...corsHeaders
+        }
       });
     }
     
     return new Response(JSON.stringify({ reply: data.choices[0].message.content }), {
-      headers: { "Content-Type": "application/json" }
+      headers: { 
+        "Content-Type": "application/json",
+        ...corsHeaders
+      }
     });
     
   } catch (error) {
@@ -255,7 +278,10 @@ INSTRUCTIONS:
       reply: "Sorry, there was an unexpected error. Please try again." 
     }), {
       status: 500,
-      headers: { "Content-Type": "application/json" }
+      headers: { 
+        "Content-Type": "application/json",
+        ...corsHeaders
+      }
     });
   }
 }
