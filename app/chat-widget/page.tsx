@@ -2,94 +2,155 @@
 
 export default function ChatWidgetPage() {
   const widgetCode = `
-<!-- Panth's AI Chat Widget -->
+<!-- Panth's Beautiful AI Chat Widget -->
 <script>
 (function() {
   // Only load once
   if (window.panthChatLoaded) return;
   window.panthChatLoaded = true;
 
-  // Create chat widget HTML
+  // Create modern chat widget HTML
   const widgetHTML = \`
     <div id="panth-chat-widget">
       <!-- Floating Chat Button -->
       <div id="chat-button" style="
         position: fixed;
-        top: 20px;
-        right: 20px;
+        bottom: 30px;
+        right: 30px;
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, #374151 0%, #4B5563 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 50%;
         cursor: pointer;
-        z-index: 9999;
+        z-index: 99999;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 3px solid rgba(255, 255, 255, 0.2);
       ">
-        <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        <svg width="28" height="28" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
         </svg>
       </div>
 
-      <!-- Chat Popup (hidden initially) -->
+      <!-- Professional Chat Popup -->
       <div id="chat-popup" style="
         position: fixed;
-        top: 90px;
-        right: 20px;
-        width: 380px;
-        height: 500px;
+        bottom: 100px;
+        right: 30px;
+        width: 400px;
+        height: 600px;
         background: white;
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-        z-index: 10000;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+        z-index: 100000;
         display: none;
         flex-direction: column;
         overflow: hidden;
+        transform: scale(0.8) translateY(20px);
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
       ">
-        <!-- Draggable Header -->
+        <!-- Beautiful Header -->
         <div id="chat-header" style="
-          background: linear-gradient(135deg, #374151 0%, #4B5563 100%);
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
-          padding: 16px;
-          cursor: move;
+          padding: 20px;
+          cursor: grab;
           display: flex;
           justify-content: space-between;
           align-items: center;
+          border-radius: 20px 20px 0 0;
+          user-select: none;
         ">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 8px; height: 8px; background: #34d399; border-radius: 50%;"></div>
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="
+              width: 12px; 
+              height: 12px; 
+              background: #4ade80; 
+              border-radius: 50%;
+              box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3);
+              animation: pulse 2s infinite;
+            "></div>
             <div>
-              <div style="font-weight: 600; font-size: 14px;">Panth's AI Assistant</div>
-              <div style="font-size: 12px; opacity: 0.8;">Ask me anything!</div>
+              <div style="font-weight: 600; font-size: 16px; margin-bottom: 2px;">Panth's AI Assistant</div>
+              <div style="font-size: 13px; opacity: 0.9;">Ask me anything about Panth!</div>
             </div>
           </div>
           <button id="close-chat" style="
-            background: none;
+            background: rgba(255, 255, 255, 0.15);
             border: none;
             color: white;
             cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
           ">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
         </div>
 
-        <!-- Chat Content -->
-        <iframe 
-          src="${typeof window !== 'undefined' ? window.location.origin : ''}/iframe-chat"
-          style="
-            flex: 1;
-            border: none;
-            width: 100%;
-          "
-        ></iframe>
+        <!-- Chat Content Area -->
+        <div style="
+          flex: 1;
+          background: #fafafa;
+          position: relative;
+          overflow: hidden;
+        ">
+          <iframe 
+            src="${typeof window !== 'undefined' ? window.location.origin : ''}/iframe-chat"
+            style="
+              width: 100%;
+              height: 100%;
+              border: none;
+              background: transparent;
+            "
+          ></iframe>
+        </div>
       </div>
+
+      <!-- Custom Styles -->
+      <style>
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+        
+        #chat-button:hover {
+          transform: scale(1.1) !important;
+          box-shadow: 0 12px 40px rgba(102, 126, 234, 0.6) !important;
+        }
+        
+        #close-chat:hover {
+          background: rgba(255, 255, 255, 0.25) !important;
+        }
+        
+        #chat-header:active {
+          cursor: grabbing !important;
+        }
+        
+        #chat-popup.show {
+          transform: scale(1) translateY(0) !important;
+          opacity: 1 !important;
+        }
+        
+        @media (max-width: 480px) {
+          #chat-popup {
+            width: calc(100vw - 20px) !important;
+            height: calc(100vh - 100px) !important;
+            bottom: 10px !important;
+            right: 10px !important;
+            left: 10px !important;
+            border-radius: 16px !important;
+          }
+        }
+      </style>
     </div>
   \`;
 
@@ -105,140 +166,251 @@ export default function ChatWidgetPage() {
   let isOpen = false;
   let isDragging = false;
   let dragOffset = { x: 0, y: 0 };
-  let originalPosition = { top: 90, right: 20 };
+  let startPos = { x: 0, y: 0 };
 
-  // Button hover effects
+  // Enhanced button interactions
   chatButton.addEventListener('mouseenter', () => {
-    if (!isOpen) chatButton.style.transform = 'scale(1.1)';
+    if (!isOpen) {
+      chatButton.style.transform = 'scale(1.1)';
+      chatButton.style.boxShadow = '0 12px 40px rgba(102, 126, 234, 0.6)';
+    }
   });
 
   chatButton.addEventListener('mouseleave', () => {
-    if (!isOpen) chatButton.style.transform = 'scale(1)';
+    if (!isOpen) {
+      chatButton.style.transform = 'scale(1)';
+      chatButton.style.boxShadow = '0 8px 32px rgba(102, 126, 234, 0.4)';
+    }
   });
 
-  // Open chat
+  // Smooth open animation
   function openChat() {
+    if (isOpen) return;
     isOpen = true;
-    chatPopup.style.display = 'flex';
-    chatButton.style.opacity = '0.7';
     
-    // Reset to original position
-    chatPopup.style.top = originalPosition.top + 'px';
-    chatPopup.style.right = originalPosition.right + 'px';
-    chatPopup.style.left = 'auto';
-    chatPopup.style.bottom = 'auto';
+    chatPopup.style.display = 'flex';
+    chatButton.style.opacity = '0.8';
+    chatButton.style.transform = 'scale(0.9)';
+    
+    // Trigger animation
+    setTimeout(() => {
+      chatPopup.classList.add('show');
+    }, 10);
   }
 
-  // Close chat
+  // Smooth close animation
   function closeChat() {
+    if (!isOpen) return;
     isOpen = false;
-    chatPopup.style.display = 'none';
+    
+    chatPopup.classList.remove('show');
     chatButton.style.opacity = '1';
     chatButton.style.transform = 'scale(1)';
+    
+    setTimeout(() => {
+      chatPopup.style.display = 'none';
+    }, 300);
   }
 
-  // Drag functionality
+  // Enhanced drag functionality
   function startDrag(e) {
+    e.preventDefault();
     isDragging = true;
+    
     const rect = chatPopup.getBoundingClientRect();
+    startPos.x = rect.left;
+    startPos.y = rect.top;
     dragOffset.x = e.clientX - rect.left;
     dragOffset.y = e.clientY - rect.top;
+    
     chatHeader.style.cursor = 'grabbing';
+    chatPopup.style.transition = 'none';
+    
+    // Add global mouse listeners
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', stopDrag);
   }
 
   function drag(e) {
     if (!isDragging) return;
     
-    const x = e.clientX - dragOffset.x;
-    const y = e.clientY - dragOffset.y;
+    e.preventDefault();
     
-    // Keep within viewport
-    const maxX = window.innerWidth - chatPopup.offsetWidth;
-    const maxY = window.innerHeight - chatPopup.offsetHeight;
+    let newX = e.clientX - dragOffset.x;
+    let newY = e.clientY - dragOffset.y;
     
-    const constrainedX = Math.max(0, Math.min(x, maxX));
-    const constrainedY = Math.max(0, Math.min(y, maxY));
+    // Keep within viewport bounds
+    const popup = chatPopup;
+    const maxX = window.innerWidth - popup.offsetWidth;
+    const maxY = window.innerHeight - popup.offsetHeight;
     
-    chatPopup.style.left = constrainedX + 'px';
-    chatPopup.style.top = constrainedY + 'px';
-    chatPopup.style.right = 'auto';
-    chatPopup.style.bottom = 'auto';
+    newX = Math.max(0, Math.min(newX, maxX));
+    newY = Math.max(0, Math.min(newY, maxY));
+    
+    popup.style.left = newX + 'px';
+    popup.style.top = newY + 'px';
+    popup.style.right = 'auto';
+    popup.style.bottom = 'auto';
   }
 
   function stopDrag() {
+    if (!isDragging) return;
+    
     isDragging = false;
-    chatHeader.style.cursor = 'move';
+    chatHeader.style.cursor = 'grab';
+    chatPopup.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    
+    // Remove global listeners
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('mouseup', stopDrag);
   }
 
   // Event listeners
   chatButton.addEventListener('click', openChat);
   closeButton.addEventListener('click', closeChat);
-  
   chatHeader.addEventListener('mousedown', startDrag);
-  document.addEventListener('mousemove', drag);
-  document.addEventListener('mouseup', stopDrag);
 
-  // Prevent text selection while dragging
-  chatHeader.addEventListener('selectstart', (e) => e.preventDefault());
+  // Prevent text selection during drag
+  chatHeader.addEventListener('selectstart', e => e.preventDefault());
+  
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      closeChat();
+    }
+  });
+
+  // Mobile touch support
+  let touchStartPos = { x: 0, y: 0 };
+  
+  chatHeader.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    touchStartPos.x = touch.clientX;
+    touchStartPos.y = touch.clientY;
+    startDrag({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => {} });
+  });
+  
+  document.addEventListener('touchmove', (e) => {
+    if (isDragging) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      drag({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => {} });
+    }
+  });
+  
+  document.addEventListener('touchend', stopDrag);
 })();
 </script>`;
 
   return (
     <div style={{ 
-      fontFamily: 'monospace', 
-      padding: '20px', 
-      backgroundColor: '#f8f9fa',
-      minHeight: '100vh'
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', 
+      padding: '40px 20px', 
+      backgroundColor: '#f8fafc',
+      minHeight: '100vh',
+      lineHeight: '1.6'
     }}>
       <div style={{ 
-        maxWidth: '800px', 
+        maxWidth: '900px', 
         margin: '0 auto',
         backgroundColor: 'white',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+        padding: '40px',
+        borderRadius: '16px',
+        boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
       }}>
-        <h1 style={{ color: '#333', marginBottom: '20px' }}>
-          🎯 Panth's Chat Widget Code
-        </h1>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h1 style={{ 
+            color: '#1e293b', 
+            marginBottom: '16px',
+            fontSize: '32px',
+            fontWeight: '700',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>
+            ✨ Beautiful Chat Widget
+          </h1>
+          <p style={{ color: '#64748b', fontSize: '18px', margin: 0 }}>
+            Professional floating chat widget for your Framer site
+          </p>
+        </div>
         
-        <p style={{ color: '#666', marginBottom: '20px' }}>
-          Copy this code and paste it into any website or Framer embed component:
-        </p>
-
         <div style={{
-          backgroundColor: '#2d3748',
+          backgroundColor: '#1e293b',
           color: '#e2e8f0',
-          padding: '20px',
-          borderRadius: '6px',
+          padding: '30px',
+          borderRadius: '12px',
           overflow: 'auto',
           fontSize: '14px',
-          lineHeight: '1.5'
+          lineHeight: '1.5',
+          fontFamily: 'Monaco, "Fira Code", monospace'
         }}>
-          <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
+          <div style={{ marginBottom: '20px', color: '#94a3b8' }}>
+            📋 Copy this code and paste it into Framer's embed component:
+          </div>
+          <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
             {widgetCode}
           </pre>
         </div>
 
-        <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f0fdf4', borderRadius: '6px' }}>
-          <h3 style={{ color: '#166534', margin: '0 0 10px 0' }}>✅ Features:</h3>
-          <ul style={{ color: '#166534', margin: 0 }}>
-            <li>Floating chat button in top-right corner</li>
-            <li>Click to open draggable chat popup</li>
-            <li>Drag anywhere on screen</li>
-            <li>Closes back to original position</li>
-            <li>Responsive and mobile-friendly</li>
-          </ul>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+          gap: '24px',
+          marginTop: '32px' 
+        }}>
+          <div style={{ 
+            padding: '24px', 
+            backgroundColor: '#f0fdf4', 
+            borderRadius: '12px',
+            border: '1px solid #bbf7d0'
+          }}>
+            <h3 style={{ color: '#166534', margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+              ✅ Features
+            </h3>
+            <ul style={{ color: '#166534', margin: 0, paddingLeft: '20px' }}>
+              <li>Beautiful gradient design</li>
+              <li>Smooth animations & transitions</li>
+              <li>Fully draggable popup</li>
+              <li>Mobile responsive</li>
+              <li>Professional styling</li>
+              <li>Pulse animation on status dot</li>
+            </ul>
+          </div>
+
+          <div style={{ 
+            padding: '24px', 
+            backgroundColor: '#fef3c7', 
+            borderRadius: '12px',
+            border: '1px solid #fcd34d'
+          }}>
+            <h3 style={{ color: '#92400e', margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+              🚀 How to Use
+            </h3>
+            <ol style={{ color: '#92400e', margin: 0, paddingLeft: '20px' }}>
+              <li>Copy the entire code above</li>
+              <li>In Framer: Add an Embed component</li>
+              <li>Paste the code</li>
+              <li>Publish your site!</li>
+            </ol>
+          </div>
         </div>
 
-        <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#fef3c7', borderRadius: '6px' }}>
-          <h3 style={{ color: '#92400e', margin: '0 0 10px 0' }}>📋 How to Use:</h3>
-          <ol style={{ color: '#92400e', margin: 0 }}>
-            <li>Copy the entire code above</li>
-            <li>In Framer: Add an Embed component</li>
-            <li>Paste the code</li>
-            <li>Publish your site!</li>
-          </ol>
+        <div style={{ 
+          marginTop: '32px', 
+          padding: '24px', 
+          backgroundColor: '#eff6ff', 
+          borderRadius: '12px',
+          border: '1px solid #bfdbfe',
+          textAlign: 'center'
+        }}>
+          <h3 style={{ color: '#1d4ed8', margin: '0 0 12px 0', fontSize: '18px', fontWeight: '600' }}>
+            💡 Pro Tip
+          </h3>
+          <p style={{ color: '#1d4ed8', margin: 0 }}>
+            The widget appears in the bottom-right corner and is fully draggable. 
+            Perfect for portfolio sites and professional presentations!
+          </p>
         </div>
       </div>
     </div>
