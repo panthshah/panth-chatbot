@@ -20,9 +20,15 @@ export async function POST(req) {
     const body = await req.json();
     console.log('Request body:', body);
 
+    const { message, pagePath, pageTitle, pageUrl } = body;
+
     const apiKey = process.env.OPENAI_API_KEY;
     console.log('API key exists:', !!apiKey);
     console.log('API key length:', apiKey?.length);
+
+    const pageContext = (pagePath || pageTitle || pageUrl)
+      ? `Current page context for Panth's portfolio site: URL: ${pageUrl || 'unknown'}, Path: ${pagePath || 'unknown'}, Title: ${pageTitle || 'unknown'}. Use this to tailor your response to the user's current section. When helpful, briefly acknowledge the current page before answering.`
+      : null;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -223,7 +229,12 @@ INSTRUCTIONS:
           },
           {
             role: "user",
-            content: body.message
+            content: message
+          },
+          ...(pageContext ? [{ role: 'system', content: pageContext }] : []),
+          {
+            role: "user",
+            content: message
           }
         ],
         temperature: 0.3,

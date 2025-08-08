@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface ChatMessage {
   user: string;
@@ -12,6 +13,7 @@ interface Position {
 }
 
 export default function FloatingChat() {
+  const pathname = usePathname();
   const [message, setMessage] = useState('');
   const [history, setHistory] = useState<ChatMessage[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +41,12 @@ export default function FloatingChat() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ 
+          message,
+          pagePath: pathname,
+          pageTitle: typeof document !== 'undefined' ? document.title : '',
+          pageUrl: typeof window !== 'undefined' ? window.location.href : ''
+        }),
       });
 
       const data = await res.json();
@@ -197,7 +204,7 @@ export default function FloatingChat() {
                   <div className="text-4xl mb-2">👋</div>
                   <h4 className="font-semibold text-gray-800 mb-2">Hi there!</h4>
                   <p className="text-gray-600 text-sm">
-                    I'm Panth's AI assistant. Ask me about his experience, skills, projects, or anything else!
+                    I'm Panth's AI assistant. {typeof document !== 'undefined' && document.title ? `You're viewing "${document.title}".` : pathname ? `You're on ${pathname}.` : ''} Ask me anything about this page or about Panth in general.
                   </p>
                 </div>
               </div>
